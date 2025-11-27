@@ -7,7 +7,10 @@ auth = Blueprint('auth',__name__)
 
 @auth.route('/login', methods=["GET","POST"])
 def login():
-    data = request.form
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get("password")
+        pass
     return render_template("login.html", text = "testing")
 
 
@@ -23,9 +26,9 @@ def signup():
             flash("email len 4+", category='error')
         else:
             #add user to db
-            new_user = User(email = 'email', first_name='first_name', last_name = 'last_name',password = generate_password_hash(password))
+            new_user = User(email = email, first_name=first_name, last_name = last_name,password = generate_password_hash(password))
             db.session.add(new_user)
-            db.session.commit
+            db.session.commit()
             flash("Account Created", category='success')
             return redirect(url_for('views.home'))
             
