@@ -10,8 +10,17 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get("password")
-        pass
-    return render_template("login.html", text = "testing")
+        
+        user = User.query.filter_by(email=email).first()
+        if user:
+            if check_password_hash(user.password,password):
+                flash('logged in', category='success')
+            else:
+                flash('incorrect',category='error')
+        else:
+            flash('email not exist', category='error')
+            
+    return render_template("login.html")
 
 
 @auth.route('/signup',methods=["GET","POST"])
@@ -22,8 +31,12 @@ def signup():
         last_name = request.form.get('last_name')
         password = request.form.get('password1')
         
+        user = User.query.filter_by(email=email).first()
+
         if len(email)<4:
             flash("email len 4+", category='error')
+        elif user:
+            flash("Email already in use")
         else:
             #add user to db
             new_user = User(email = email, first_name=first_name, last_name = last_name,password = generate_password_hash(password))
