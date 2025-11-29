@@ -23,7 +23,7 @@ def login():
         else:
             flash('email not exist', category='error')
             
-    return render_template("login.html")
+    return render_template("login.html", user = current_user)
 
 
 @auth.route('/signup',methods=["GET","POST"])
@@ -50,7 +50,7 @@ def signup():
 
             return redirect(url_for('views.home'))
 
-    return render_template("signup.html")
+    return render_template("signup.html", user= current_users)
 
 
 
